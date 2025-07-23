@@ -1,8 +1,8 @@
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-
 import { createApp } from 'vue'
-
+import { createI18n } from 'vue-i18n'
+import messages from '@/locales/message-vue-i18n'
 // Vuetify
 import '@mdi/font/css/materialdesignicons.css'
 import { createVuetify } from 'vuetify'
@@ -20,6 +20,13 @@ async function initializeApp() {
   const pinia = createPinia()
   pinia.use(piniaPluginPersistedstate)
 
+  const i18n = createI18n({
+    legacy: false,
+    locale: 'en', 
+    fallbackLocale: 'en',
+    messages
+  })
+
   const app = createApp(App)
   const vuetify = createVuetify({
     theme: {
@@ -32,8 +39,8 @@ async function initializeApp() {
       VTimePicker
     }
   })
-
-  app.use(pinia)
+ 
+  app.use(pinia)  
   try {
     await migrateSite()
   } catch (error) {
@@ -43,7 +50,7 @@ async function initializeApp() {
 
   app.use(vuetify)
   app.use(router)
-
+  app.use(i18n)
   app.mount('#app')
 }
 
